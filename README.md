@@ -29,6 +29,18 @@ cd JFastText
 mvn package
 ```
 
+## Updating the version of fastText
+Clone and build the JFastText repo
+
+```
+cd ../JFastText/src/main/cpp/fastText
+git checkout master
+cd -
+mvn install
+``` 
+
+This will create a jar file that includes a natively built fastText library  
+
 ## Examples
 Examples on how to use JFastText can be found at [examples/api](examples/api) and [examples/cmd](examples/cmd).
 
