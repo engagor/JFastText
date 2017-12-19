@@ -83,8 +83,8 @@ public class JFastText {
         return probaPredictions;
     }
 
-    public List<Float> getVector(String word) {
-        FastTextWrapper.RealVector rv = fta.getVector(word);
+    public List<Float> getWordVector(String word) {
+        FastTextWrapper.RealVector rv = fta.getWordVector(word);
         List<Float> wordVec = new ArrayList<>();
         for (int i = 0; i < rv.size(); i++) {
             wordVec.add(rv.get(i));

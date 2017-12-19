@@ -28,10 +28,12 @@ namespace FastTextWrapper {
         int32_t version;
         in.read((char*)&(magic), sizeof(int32_t));
         if (magic != FASTTEXT_FILEFORMAT_MAGIC_INT32) {
+            std::cerr << "fasttest_wrapper.cc: The model's magic int32 is wrong." << std::endl;
             return false;
         }
         in.read((char*)&(version), sizeof(int32_t));
         if (version != FASTTEXT_VERSION) {
+            std::cerr << "fasttest_wrapper.cc: The model's fastText version is wrong!" << std::endl;
             return false;
         }
         return true;
@@ -78,9 +80,9 @@ namespace FastTextWrapper {
         return predictions;
     }
 
-    std::vector<real> FastTextApi::getVector(const std::string& word) {
+    std::vector<real> FastTextApi::getWordVector(const std::string& word) {
         Vector vec(privateMembers->args_->dim);
-        fastText.getVector(vec, word);
+        fastText.getWordVector(vec, word);
         return std::vector<real>(vec.data_, vec.data_ + vec.m_);
     }
 

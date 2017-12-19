@@ -82,7 +82,7 @@ public class JFastTextTest {
         JFastText jft = new JFastText();
         jft.loadModel("src/test/resources/models/supervised.model.bin");
         String word = "soccer";
-        List<Float> vec = jft.getVector(word);
+        List<Float> vec = jft.getWordVector(word);
         System.out.printf("\nWord embedding vector of '%s': %s\n", word, vec);
     }
 
