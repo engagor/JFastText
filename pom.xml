@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.vinhkhuc</groupId>
+    <groupId>com.engagor</groupId>
     <artifactId>jfasttext</artifactId>
-    <version>0.4-SNAPSHOT</version>
+    <version>1.0</version>
     <name>Java interface for fastText</name>
     <description>
         JFastText is a Java interface for fastText, a library for efficient learning of
@@ -34,9 +34,9 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/vinhkhuc/JFastText.git</connection>
-        <developerConnection>scm:git:git@github.com:vinhkhuc/JFastText.git</developerConnection>
-        <url>https://github.com/vinhkhuc/JFastText</url>
+        <connection>scm:git:https://github.com/engagor/JFastText.git</connection>
+        <developerConnection>scm:git:git@github.com:engagor/JFastText.git</developerConnection>
+        <url>https://github.com/engagor/JFastText</url>
     </scm>
 
     <properties>
