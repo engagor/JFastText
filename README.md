@@ -10,21 +10,13 @@ are supported via the command line interface.
 JFastText is ideal for building fast text classifiers in Java.
 
 ## Maven dependency
-```xml
-<dependency>
-  <groupId>com.github.vinhkhuc</groupId>
-  <artifactId>jfasttext</artifactId>
-  <version>0.3</version>
-</dependency>
-```
-The Jar package on Maven Central is bundled with precompiled fastText library for Windows, Linux and
-MacOSX 64bit.
+There is no package available on Maven yet, you have to build one yourself for your specific architecture (linux, mac or windows)
 
 ## Building
 C++ compiler (g++ on Mac/Linux or cl.exe on Windows) is required to compile fastText's code.
 
 ```bash
-git clone --recursive https://github.com/vinhkhuc/JFastText
+git clone --recursive https://github.com/engagor/JFastText
 cd JFastText
 mvn package
 ```
@@ -33,10 +25,8 @@ mvn package
 Clone and build the JFastText repo
 
 ```
-cd ../JFastText/src/main/cpp/fastText
-git checkout master
-cd -
-mvn install
+git submodule update --init --recursive
+mvn package
 ``` 
 
 This will create a jar file that includes a natively built fastText library  
