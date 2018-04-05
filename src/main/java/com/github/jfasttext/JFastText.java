@@ -73,7 +73,8 @@ public class JFastText {
         if (k <= 0) {
             throw new IllegalArgumentException("k must be positive");
         }
-        FastTextWrapper.FloatStringPairVector fspv = fta.predictProba(text, k);
+        // See https://github.com/vinhkhuc/JFastText/issues/9 regarding the addition of the newline.
+        FastTextWrapper.FloatStringPairVector fspv = fta.predictProba(text + "\n", k);
         List<ProbLabel> probaPredictions = new ArrayList<>();
         for (int i = 0; i < fspv.size(); i++) {
             float logProb = fspv.first(i);
@@ -105,7 +106,7 @@ public class JFastText {
     }
 
     public List<String> getLabels() {
-        return stringVec2Strings(fta.getWords());
+        return stringVec2Strings(fta.getLabels());
     }
 
     public double getLr() {
