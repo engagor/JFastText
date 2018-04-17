@@ -6,7 +6,7 @@
 
     <groupId>com.engagor</groupId>
     <artifactId>jfasttext</artifactId>
-    <version>1.0</version>
+    <version>1.1</version>
     <name>Java interface for fastText</name>
     <description>
         JFastText is a Java interface for fastText, a library for efficient learning of
