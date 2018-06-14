@@ -19,6 +19,7 @@ namespace FastTextWrapper {
         FastTextApi();
         // We don't make runCmd() a static method so that Loader.load() is always be called in FastTextApi().
         void runCmd(int, char **);
+        void quantize(const std::vector<std::string>&);
         bool checkModel(const std::string&);
         void loadModel(const std::string&);
         // Model unloading is not available in fastText C++. This method is added since

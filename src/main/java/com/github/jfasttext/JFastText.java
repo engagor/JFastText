@@ -22,6 +22,14 @@ public class JFastText {
         fta.runCmd(cArgs.length, new PointerPointer(cArgs));
     }
 
+    public void quantize(String[] args) {
+        // hack so that quantize can be called without triggering C++ exit at the end
+        String[] cArgs = new String[args.length + 1];
+        cArgs[0] = "fasttext";
+        System.arraycopy(args, 0, cArgs, 1, args.length);
+        fta.quantize(new FastTextWrapper.StringVector(cArgs));
+    }
+
     public void loadModel(String modelFile) throws Exception {
         if (!new File(modelFile).exists()) {
             throw new Exception("Model file doesn't exist!");

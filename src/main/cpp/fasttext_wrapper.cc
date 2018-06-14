@@ -21,6 +21,21 @@ namespace FastTextWrapper {
         main(argc, argv);  // call fastText's main()
     }
 
+    void FastTextApi::quantize(const std::vector<std::string>& args) {
+      // hack: we can't use runCmd to do quantization inside Java code because it ends with exit(0);
+      // this is copied from fasttext's main.cc
+      std::shared_ptr<Args> a = std::make_shared<Args>();
+      if (args.size() < 3) {
+        exit(EXIT_FAILURE);
+      }
+      a->parseArgs(args);
+      FastText fasttext;
+      // parseArgs checks if a->output is given.
+      fasttext.loadModel(a->output + ".bin");
+      fasttext.quantize(a);
+      fasttext.saveModel();
+    }
+
     bool FastTextApi::checkModel(const std::string& filename) {
         // Replicate the logic in FastText::checkModel() since it's a private function
         std::ifstream in(filename, std::ifstream::binary);

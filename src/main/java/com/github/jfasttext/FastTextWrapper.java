@@ -185,6 +185,7 @@ public class FastTextWrapper extends com.github.jfasttext.config.FastTextWrapper
         public native void runCmd(int arg0, @Cast("char**") @ByPtrPtr BytePointer arg1);
         public native void runCmd(int arg0, @Cast("char**") @ByPtrPtr ByteBuffer arg1);
         public native void runCmd(int arg0, @Cast("char**") @ByPtrPtr byte[] arg1);
+        public native void quantize(@Const @ByRef StringVector arg0);
         public native @Cast("bool") boolean checkModel(@StdString BytePointer arg0);
         public native @Cast("bool") boolean checkModel(@StdString String arg0);
         public native void loadModel(@StdString BytePointer arg0);
