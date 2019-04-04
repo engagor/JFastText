@@ -196,10 +196,12 @@ public class FastTextWrapper extends com.github.jfasttext.config.FastTextWrapper
         public native void test(@StdString BytePointer arg0, int arg1);
         public native void test(@StdString String arg0, int arg1);
         // TODO: Check if model was loaded
-        public native @ByVal StringVector predict(@StdString BytePointer arg0, int arg1);
-        public native @ByVal StringVector predict(@StdString String arg0, int arg1);
-        public native @ByVal FloatStringPairVector predictProba(@StdString BytePointer arg0, int arg1);
-        public native @ByVal FloatStringPairVector predictProba(@StdString String arg0, int arg1);
+        //const std::string& text, int32_t k, fasttext::real threshold
+        public native @ByVal StringVector predict(@StdString BytePointer arg0, int arg1, @ByVal float arg2);
+        public native @ByVal StringVector predict(@StdString String arg0, int arg1, @ByVal float arg2);
+        // const std::string& text, int32_t k, fasttext::real threshold
+        public native @ByVal FloatStringPairVector predictProba(@StdString BytePointer arg0, int arg1, @ByVal float arg2);
+        public native @ByVal FloatStringPairVector predictProba(@StdString String arg0, int arg1, @ByVal float arg2);
         public native @ByVal RealVector getWordVector(@StdString BytePointer arg0);
         public native @ByVal RealVector getWordVector(@StdString String arg0);
         public native @ByVal StringVector getWords();
@@ -236,12 +238,15 @@ public class FastTextWrapper extends com.github.jfasttext.config.FastTextWrapper
 // Added <numeric> since VS 14.0 complains about missing std::iota
 // #include <numeric>
 // #include "fastText/src/args.cc"
+// #include "fastText/src/densematrix.cc"
 // #include "fastText/src/dictionary.cc"
 // #include "fastText/src/fasttext.cc"
+// #include "fastText/src/loss.cc"
 // #include "fastText/src/matrix.cc"
+// #include "fastText/src/meter.cc"
 // #include "fastText/src/model.cc"
 // #include "fastText/src/productquantizer.cc"
-// #include "fastText/src/qmatrix.cc"
+// #include "fastText/src/quantmatrix.cc"
 // #include "fastText/src/vector.cc"
 // #include "fastText/src/utils.cc"
 
