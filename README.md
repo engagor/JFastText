@@ -26,7 +26,7 @@ are supported via the command line interface.
 JFastText is ideal for building fast text classifiers in Java.
 
 ## Maven Dependency
-The upstream [JFastText|https://github.com/vinhkhuc/JFastText] is available in Maven, bundled with precompiled fastText library for Windows, Linux and MacOSX 64bit.
+The upstream [JFastText](https://github.com/vinhkhuc/JFastText) is available in Maven, bundled with precompiled fastText library for Windows, Linux and MacOSX 64bit.
 ```xml
 <dependency>
   <groupId>com.github.vinhkhuc</groupId>
@@ -42,6 +42,9 @@ C++ compiler (g++ on Mac/Linux or cl.exe on Windows) is required to compile fast
 
 ```bash
 git clone --recursive https://github.com/engagor/JFastText
+```
+There is currently an issue with building JFastText with Maven. To work around it, open `src/main/cpp/fastText/src/loss.cc` and rename all occurrences of `comparePairs` to `compareLossPairs`. Then you can build JFastText:
+```bash
 cd JFastText
 mvn package
 ```
