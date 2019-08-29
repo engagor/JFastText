@@ -30,12 +30,14 @@ public class JFastText {
         fta.quantize(new FastTextWrapper.StringVector(cArgs));
     }
 
-    public void loadModel(String modelFile) throws Exception {
+    public void loadModel(String modelFile) {
+
         if (!new File(modelFile).exists()) {
-            throw new Exception("Model file doesn't exist!");
+            throw new IllegalArgumentException("Model file doesn't exist!");
         }
         if (!fta.checkModel(modelFile)) {
-            throw new Exception("Model file's format is not compatible with this JFastText version!");
+            throw new IllegalArgumentException(
+                    "Model file's format is not compatible with this JFastText version!");
         }
         fta.loadModel(modelFile);
     }
@@ -64,7 +66,22 @@ public class JFastText {
         if (k <= 0) {
             throw new IllegalArgumentException("k must be positive");
         }
-        FastTextWrapper.StringVector sv = fta.predict(text, k);
+        FastTextWrapper.StringVector sv = fta.predict(text, k, 0);
+        List<String> predictions = new ArrayList<>();
+        for (int i = 0; i < sv.size(); i++) {
+            predictions.add(sv.get(i).getString());
+        }
+        return predictions;
+    }
+
+    public List<String> predict(String text, int k, float threshold) {
+        if (k <= 0) {
+            throw new IllegalArgumentException("k must be positive");
+        }
+        if (threshold < 0 || threshold > 1) {
+            throw new IllegalArgumentException("threshold must be between 0 and 1");
+        }
+        FastTextWrapper.StringVector sv = fta.predict(text, k, threshold);
         List<String> predictions = new ArrayList<>();
         for (int i = 0; i < sv.size(); i++) {
             predictions.add(sv.get(i).getString());
@@ -82,7 +99,26 @@ public class JFastText {
             throw new IllegalArgumentException("k must be positive");
         }
         // See https://github.com/vinhkhuc/JFastText/issues/9 regarding the addition of the newline.
-        FastTextWrapper.FloatStringPairVector fspv = fta.predictProba(text + "\n", k);
+        FastTextWrapper.FloatStringPairVector fspv = fta.predictProba(text + "\n", k, 0);
+        List<ProbLabel> probaPredictions = new ArrayList<>();
+        for (int i = 0; i < fspv.size(); i++) {
+            float logProb = fspv.first(i);
+            String label = fspv.second(i).getString();
+            probaPredictions.add(new ProbLabel(logProb, label));
+        }
+        return probaPredictions;
+    }
+
+
+    public List<ProbLabel> predictProba(String text, int k, float threshold) {
+        if (k <= 0) {
+            throw new IllegalArgumentException("k must be positive");
+        }
+        if (threshold < 0 || threshold > 1) {
+            throw new IllegalArgumentException("threshold must be between 0 and 1");
+        }
+        // See https://github.com/vinhkhuc/JFastText/issues/9 regarding the addition of the newline.
+        FastTextWrapper.FloatStringPairVector fspv = fta.predictProba(text + "\n", k, threshold);
         List<ProbLabel> probaPredictions = new ArrayList<>();
         for (int i = 0; i < fspv.size(); i++) {
             float logProb = fspv.first(i);

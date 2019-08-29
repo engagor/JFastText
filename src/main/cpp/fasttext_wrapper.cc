@@ -22,18 +22,18 @@ namespace FastTextWrapper {
     }
 
     void FastTextApi::quantize(const std::vector<std::string>& args) {
-      // hack: we can't use runCmd to do quantization inside Java code because it ends with exit(0);
-      // this is copied from fasttext's main.cc
-      std::shared_ptr<Args> a = std::make_shared<Args>();
-      if (args.size() < 3) {
-        exit(EXIT_FAILURE);
-      }
-      a->parseArgs(args);
-      FastText fasttext;
-      // parseArgs checks if a->output is given.
-      fasttext.loadModel(a->output + ".bin");
-      fasttext.quantize(a);
-      fasttext.saveModel();
+        // hack: we can't use runCmd to do quantization inside Java code because it ends with exit(0);
+        // this is copied from fasttext's main.cc
+        Args a = Args();
+        if (args.size() < 3) {
+            exit(EXIT_FAILURE);
+        }
+        a.parseArgs(args);
+        FastText fasttext;
+        // parseArgs checks if a->output is given.
+        fasttext.loadModel(a.output + ".bin");
+        fasttext.quantize(a);
+        fasttext.saveModel(a.output + ".ftz");
     }
 
     bool FastTextApi::checkModel(const std::string& filename) {
@@ -78,8 +78,8 @@ namespace FastTextWrapper {
         fastText.test(ifs, k);
     }
 
-    std::vector<std::string> FastTextApi::predict(const std::string& text, int32_t k) {
-        std::vector<std::pair<real,std::string>> predictions = predictProba(text, k);
+    std::vector<std::string> FastTextApi::predict(const std::string& text, int32_t k, fasttext::real threshold) {
+        std::vector<std::pair<real,std::string>> predictions = predictProba(text, k, threshold);
         std::vector<std::string> labels;
         for (auto it = predictions.cbegin(); it != predictions.cend(); ++it) {
             labels.push_back(it->second);
@@ -88,17 +88,27 @@ namespace FastTextWrapper {
     }
 
     std::vector<std::pair<real,std::string>> FastTextApi::predictProba(
-            const std::string& text, int32_t k) {
+            const std::string& text, int32_t k, fasttext::real threshold) {
         std::vector<std::pair<real,std::string>> predictions;
+        fasttext::Predictions linePredictions;
         std::istringstream in(text);
-        fastText.predict(in, k, predictions);
+
+        std::vector<int32_t> words, labels;
+        privateMembers->dict_->getLine(in, words, labels);
+        // fastText.predict(in, k, predictions);
+        fastText.predict(k, words, linePredictions, threshold);
+
+        for (const auto& p : linePredictions) {
+            predictions.push_back(
+                std::make_pair(p.first, privateMembers->dict_->getLabel(p.second)));
+        }
         return predictions;
     }
 
     std::vector<real> FastTextApi::getWordVector(const std::string& word) {
         Vector vec(privateMembers->args_->dim);
         fastText.getWordVector(vec, word);
-        return std::vector<real>(vec.data_, vec.data_ + vec.m_);
+        return std::vector<real>(vec.data(), vec.data() + vec.size());
     }
 
     std::vector<std::string> FastTextApi::getWords() {
@@ -179,6 +189,8 @@ namespace FastTextWrapper {
             return "hs";
         } else if (lossName == loss_name::softmax) {
             return "softmax";
+        } else if (lossName == loss_name::ova) {
+            return "ova";
         } else {
             std::cerr << "fasttest_wrapper.cc: Unrecognized loss name!" << std::endl;
             exit(EXIT_FAILURE);

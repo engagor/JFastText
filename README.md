@@ -1,3 +1,19 @@
+[![Build Status](https://travis-ci.org/vinhkhuc/JFastText.svg?branch=master)](https://travis-ci.org/vinhkhuc/JFastText)
+
+Table of Contents
+=================
+
+  * [Introduction](#introduction)
+  * [Maven Dependency](#maven-dependency)
+  * [Building](#building)
+  * [Quick Application - Language Identification](#quick-application-\--language-identification)
+  * [Detailed Examples](#detailed-examples)
+  * [API](#api)
+  * [FastText's Command Line](#fasttexts-command-line)
+  * [License](#license)
+  * [References](#references)
+  
+
 ## Introduction
 JFastText is a Java wrapper for Facebook's [fastText](https://github.com/facebookresearch/fastText), 
 a library for efficient learning of word embeddings and fast sentence classification. The JNI interface
@@ -9,14 +25,26 @@ are supported via the command line interface.
 
 JFastText is ideal for building fast text classifiers in Java.
 
-## Maven dependency
-There is no package available on Maven yet, you have to build one yourself for your specific architecture (linux, mac or windows)
+## Maven Dependency
+The upstream [JFastText](https://github.com/vinhkhuc/JFastText) is available in Maven, bundled with precompiled fastText library for Windows, Linux and MacOSX 64bit.
+```xml
+<dependency>
+  <groupId>com.github.vinhkhuc</groupId>
+  <artifactId>jfasttext</artifactId>
+  <version>0.4</version>
+</dependency>
+```
+
+However, this fork contains changes that are not available in that Maven jar. We have to build it ourselves for each specific supported achitecture (linux, mac or windows).
 
 ## Building
 C++ compiler (g++ on Mac/Linux or cl.exe on Windows) is required to compile fastText's code.
 
 ```bash
 git clone --recursive https://github.com/engagor/JFastText
+```
+There is currently an issue with building JFastText with Maven. To work around it, open `src/main/cpp/fastText/src/loss.cc` and rename all occurrences of `comparePairs` to `compareLossPairs`. Then you can build JFastText:
+```bash
 cd JFastText
 mvn package
 ```
@@ -31,10 +59,24 @@ mvn package
 
 This will create a jar file that includes a natively built fastText library  
 
-## Examples
+## Quick Application - Language Identification
+JFastText can use FastText's pretrained models directly. Language identification models can be downloaded [here](https://fasttext.cc/docs/en/language-identification.html).
+In this quick example, we will use the [quantized model](https://s3-us-west-1.amazonaws.com/fasttext-vectors/supervised_models/lid.176.ftz)
+which is super small and a bit less accurate than the original model.
+
+```bash
+$ wget -q https://s3-us-west-1.amazonaws.com/fasttext-vectors/supervised_models/lid.176.ftz \
+    && { echo "This is English"; echo "Xin chào"; echo "Привет"; } \
+    | java -jar target/jfasttext-*-jar-with-dependencies.jar predict lid.176.ftz -
+__label__en
+__label__vi
+__label__ru
+```
+
+## Detailed Examples
 Examples on how to use JFastText can be found at [examples/api](examples/api) and [examples/cmd](examples/cmd).
 
-## How to use
+## API
 
 ### Initialization
 
@@ -74,7 +116,8 @@ System.out.printf("\nThe label of '%s' is '%s' with probability %f\n",
         text, probLabel.label, Math.exp(probLabel.logProb));
 ```
 
-### FastText's command line
+## FastText's Command Line
+FastText's command line interface can be accessed as follows:
 ```bash
 $ java -jar target/jfasttext-*-jar-with-dependencies.jar
 usage: fasttext <command> <args>
@@ -90,8 +133,10 @@ The commands supported by fasttext are:
   cbow                    train a cbow model
   print-word-vectors      print word vectors given a trained model
   print-sentence-vectors  print sentence vectors given a trained model
+  print-ngrams            print ngrams given a trained model and word
   nn                      query for nearest neighbors
   analogies               query for analogies
+  dump                    dump arguments,dictionary,input/output vectors
 
 ```
 

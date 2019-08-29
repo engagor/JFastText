@@ -27,8 +27,10 @@ namespace FastTextWrapper {
         void unloadModel();
         void test(const std::string&, int32_t);
         // TODO: Check if model was loaded
-        std::vector<std::string> predict(const std::string&, int32_t);
-        std::vector<std::pair<real,std::string>> predictProba(const std::string&, int32_t);
+        //const std::string& text, int32_t k, fasttext::real threshold
+        std::vector<std::string> predict(const std::string&, int32_t, fasttext::real);
+        // const std::string& text, int32_t k, fasttext::real threshold
+        std::vector<std::pair<real,std::string>> predictProba(const std::string&, int32_t, fasttext::real);
         std::vector<real> getWordVector(const std::string&);
         std::vector<std::string> getWords();
         std::vector<std::string> getLabels();
